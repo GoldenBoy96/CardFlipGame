@@ -7,8 +7,14 @@ public class PoolingHelper : MonoBehaviour
 {
     public static List<PoolObjectInfor> ObjectPools = new();
 
-    public static GameObject SpawnObject(GameObject objectToSpawn, Vector3 spawnPosition, Quaternion spawnRotation)
+    public static GameObject SpawnObject(GameObject objectToSpawn, Transform parent, Vector3 spawnPosition, Quaternion spawnRotation)
     {
+        if (objectToSpawn == null)
+        {
+            Debug.Log("Object To Spawn is null!");
+            return null;
+        }
+
         PoolObjectInfor pool = ObjectPools.Find(p => p.LookupString == objectToSpawn.name);
 
         //If the pool isn't exist, create it
@@ -27,11 +33,13 @@ public class PoolingHelper : MonoBehaviour
 
         if (spawnableObject == null)
         {
-            spawnableObject = Instantiate(objectToSpawn, spawnPosition, spawnRotation);
+            spawnableObject = Instantiate(objectToSpawn, parent);
+            spawnableObject.transform.SetLocalPositionAndRotation(spawnPosition, spawnRotation);
         }
         else
         {
-            spawnableObject.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+            spawnableObject.transform.SetParent(parent);
+            spawnableObject.transform.SetLocalPositionAndRotation(spawnPosition, spawnRotation);
             pool.InactiveObjects.Remove(spawnableObject);
             spawnableObject.SetActive(true);
 
@@ -42,6 +50,11 @@ public class PoolingHelper : MonoBehaviour
 
     public static void ReturnObjectToPool(GameObject objectToPool)
     {
+        if (objectToPool == null)
+        {
+            Debug.Log("Object To Return is null!");
+            return;
+        }
         //Debug.Log("ReturnObjectToPool " + objectToPool.name);
         string objectToPoolName = objectToPool.name.Replace("(Clone)", "").Trim();
         PoolObjectInfor pool = ObjectPools.Find(p => p.LookupString.Equals(objectToPoolName));
