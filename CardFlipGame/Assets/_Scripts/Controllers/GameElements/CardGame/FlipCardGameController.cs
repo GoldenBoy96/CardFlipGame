@@ -37,7 +37,7 @@ public class FlipCardGameController : MonoBehaviour
             Level = level
         };
         battleLog.Turns.Add(currentTurn);
-        ObserverHelper.Notify(ObserverConstants.PLAYING, currentTurn);
+        ObserverHelper.Notify(ObserverConstants.START_GAME, currentTurn);
     }
 
     public void DoTurn(Coordinate coord1, Coordinate coord2)
