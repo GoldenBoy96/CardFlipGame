@@ -19,6 +19,7 @@ public class LevelSaveLoadHelper
             { 8, 9, 9, 10, 10 },
         },
         ScorePerTurn = 5,
+        TotalTurn = 50,
         CardCollection = new()
     };
     public static void SaveLevel(Level level)

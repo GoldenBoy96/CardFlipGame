@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 941569758}
   - component: {fileID: 941569757}
   m_Layer: 0
-  m_Name: '[Test]'
+  m_Name: '[GenerateCard]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
