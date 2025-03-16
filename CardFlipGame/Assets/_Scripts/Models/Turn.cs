@@ -17,6 +17,11 @@ public class Turn : ICloneable<Turn>
     public int[,] Matrix { get => matrix; set => matrix = value; }
     public int TurnLeft { get => turnLeft; set => turnLeft = value; }
     public GameStatus GameStatus { get => gameStatus; set => gameStatus = value; }
+
+    public override string ToString()
+    {
+        return $"{{{nameof(InputPair)}={InputPair.ToString()}, {nameof(CurrentScore)}={CurrentScore.ToString()}, {nameof(Matrix)}={Matrix}, {nameof(TurnLeft)}={TurnLeft.ToString()}, {nameof(GameStatus)}={GameStatus.ToString()}}}";
+    }
 }
 
 

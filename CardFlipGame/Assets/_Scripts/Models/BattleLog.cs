@@ -11,4 +11,9 @@ public class BattleLog : ICloneable<BattleLog>
 
     public Level Level { get => level; set => level = value; }
     public List<Turn> Turns { get => turns; set => turns = value; }
+
+    public override string ToString()
+    {
+        return $"{{{nameof(Level)}={Level}, {nameof(Turns)}={Turns}}}";
+    }
 }

@@ -5,7 +5,8 @@ public enum SampleState
 
 public enum GameStatus
 {
-    Playing,
+    Normal,
+    FindPair,
     Win,
     Lose,
 }

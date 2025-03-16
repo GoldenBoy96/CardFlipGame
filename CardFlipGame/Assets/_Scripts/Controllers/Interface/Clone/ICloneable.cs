@@ -1,10 +1,11 @@
+using Newtonsoft.Json;
 using UnityEngine;
 
 public interface ICloneable<T>
 {
     public T CloneSelf()
     {
-        var serialized = JsonUtility.ToJson(this);
-        return JsonUtility.FromJson<T>(serialized);
+        var serialized = JsonConvert.SerializeObject(this, Formatting.Indented); ;
+        return JsonConvert.DeserializeObject<T>(serialized);
     }
 }

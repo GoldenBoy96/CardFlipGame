@@ -10,6 +10,12 @@ public class FlipCardGameController : MonoBehaviour
 
     private void Awake()
     {
+        ObserverHelper.RegisterListener(ObserverConstants.START_GAME,
+            (param) =>
+            {
+                StartGame();
+            }
+            );
         ObserverHelper.RegisterListener(ObserverConstants.INPUT,
             (param) =>
             {
@@ -28,8 +34,8 @@ public class FlipCardGameController : MonoBehaviour
         {
             CurrentScore = 0,
             Matrix = level.BaseMatrix,
-            TurnLeft = 0,
-            GameStatus = GameStatus.Playing
+            TurnLeft = level.TotalTurn,
+            GameStatus = GameStatus.Normal
         };
 
         battleLog = new BattleLog
@@ -37,37 +43,39 @@ public class FlipCardGameController : MonoBehaviour
             Level = level
         };
         battleLog.Turns.Add(currentTurn);
-        ObserverHelper.Notify(ObserverConstants.START_GAME, currentTurn);
+        ObserverHelper.Notify(ObserverConstants.LOADED_GAME, currentTurn);
     }
 
     public void DoTurn(Coordinate coord1, Coordinate coord2)
     {
         currentTurn = ((ICloneable<Turn>)currentTurn).CloneSelf();
+
         currentTurn.TurnLeft--;
         currentTurn.InputPair = new(coord1, coord2);
 
-        if (Validate(coord1, coord2))
+        bool isFindPair = Validate(coord1, coord2);
+        if (isFindPair)
         {
             currentTurn.Matrix[coord1.X, coord1.Y] = 0;
-            currentTurn.Matrix[coord2.X, coord2.Y] = 1;
+            currentTurn.Matrix[coord2.X, coord2.Y] = 0;
             currentTurn.CurrentScore += battleLog.Level.ScorePerTurn;
         }
 
         currentTurn.GameStatus = CheckGameStatus();
         switch (currentTurn.GameStatus)
         {
-            case GameStatus.Playing:
-                ObserverHelper.Notify(ObserverConstants.PLAYING, currentTurn);
+            case GameStatus.Normal:
+                ObserverHelper.Notify(ObserverConstants.NORMAL, currentTurn, isFindPair);
                 break;
             case GameStatus.Win:
                 //Notify Win
-                ObserverHelper.Notify(ObserverConstants.WIN, currentTurn);
+                ObserverHelper.Notify(ObserverConstants.WIN, currentTurn, isFindPair);
                 Debug.Log("Win");
                 BattleLogSaveLoadHelper.SaveBattleLog(battleLog);
                 break;
             case GameStatus.Lose:
                 //Notify Lose
-                ObserverHelper.Notify(ObserverConstants.LOSE, currentTurn);
+                ObserverHelper.Notify(ObserverConstants.LOSE, currentTurn, isFindPair);
                 Debug.Log("Lose");
                 BattleLogSaveLoadHelper.SaveBattleLog(battleLog);
                 break;
@@ -78,6 +86,9 @@ public class FlipCardGameController : MonoBehaviour
 
     public bool Validate(Coordinate coord1, Coordinate coord2)
     {
+        //Debug.Log(coord1);
+        //Debug.Log(currentTurn.Matrix);
+        //Debug.Log(currentTurn.Matrix[coord1.X, coord1.Y]);
         if (currentTurn.Matrix[coord1.X, coord1.Y] == currentTurn.Matrix[coord2.X, coord2.Y])
         {
             return true;
@@ -113,7 +124,7 @@ public class FlipCardGameController : MonoBehaviour
                 return GameStatus.Win;
             }
         }
-        return GameStatus.Playing;
+        return GameStatus.Normal;
     }
 
 }
