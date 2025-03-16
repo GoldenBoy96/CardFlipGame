@@ -1,0 +1,3 @@
+Example: Shoot, Slash, Parry, ...
+Controller should describe common Behaviors may be used on many Elements
+ 
