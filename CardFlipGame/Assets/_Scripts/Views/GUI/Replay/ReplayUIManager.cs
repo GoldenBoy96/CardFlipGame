@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,9 @@ public class ReplayingUIManager : MonoBehaviour
     [SerializeField] BattleLog battleLog;
     [SerializeField] Turn currentTurn; // Lượt hiện tại   
     [SerializeField] float delayTimeBetweenTurn = 1f;
+
+    [SerializeField] TMP_Text scoreTMP;
+    [SerializeField] TMP_Text turnLeftTMP;
 
     List<Coordinate> registeredCard = new();
 
@@ -74,6 +78,7 @@ public class ReplayingUIManager : MonoBehaviour
         {
             var flipCardTime = cardPrefab.GetComponent<ReplayCardUI>().FlipCardTime;
             yield return new WaitForSeconds(flipCardTime);
+            UpdateUIStat(currentTurn);
             StartCoroutine(WaitAndDoTurn(turnIndex + 1));
         }
 
@@ -98,7 +103,26 @@ public class ReplayingUIManager : MonoBehaviour
 
         gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         gridLayoutGroup.constraintCount = matrix.GetLength(1);
-        //TO DO: Làm reponsive cho gridLayoutGroup
+
+        //Reponsive cho gridLayoutGroup 
+        var totalHeight = cardParent.GetComponent<RectTransform>().rect.height;
+        var unitHeight = totalHeight / (matrix.GetLength(0));
+        Debug.Log(totalHeight + " | " + matrix.GetLength(0));
+        float unitWidth = 0;
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                unitWidth = cardGameObjects[i, j].GetComponent<ReplayCardUI>().SetHeightReturnWidth(unitHeight * 0.9f);
+            }
+        }
+        Vector2 newSize = new Vector2(unitWidth * 1.2f, unitHeight);
+        gridLayoutGroup.GetComponent<GridLayoutGroup>().spacing = newSize;
+    }
+    private void UpdateUIStat(Turn turn)
+    {
+        scoreTMP.text = $"Score: {turn.CurrentScore}";
+        turnLeftTMP.text = $"Turn remain: {turn.TurnLeft}";
     }
 
 }

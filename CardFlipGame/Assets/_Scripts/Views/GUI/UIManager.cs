@@ -6,29 +6,113 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject startUI; // UI Start Game
-    public GameObject pauseUI; // UI Pause Game
-    public GameObject gameOverUI; // UI Game Over
+    [SerializeField] GameObject menuUI;
+    [SerializeField] GameObject gameUI;
+    [SerializeField] GameObject replayUI;
+    [SerializeField] GameObject levelEditorUI;
+    List<GameObject> ScreenUIGroup = new();
 
-    public void UIStart()
+    [SerializeField] GameObject pauseUI;
+    [SerializeField] GameObject winUI;
+    [SerializeField] GameObject loseUI;
+    List<GameObject> PopUpUIGroup = new();
+
+
+    public static UIManager Instance;
+
+    private void Awake()
     {
-        startUI.SetActive(true); // Hiển thị UI Start Game
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void OpenUIPause()
+    private void Start()
     {
-        pauseUI.SetActive(true); // Hiển thị UI Pause Game
+        GroupUI();
     }
 
-    public void CloseUIPause()
+    void GroupUI()
     {
-        pauseUI.SetActive(false); // Ẩn UI Pause Game
+        ScreenUIGroup = new()
+        {
+            menuUI,
+            gameUI,
+            replayUI, 
+            levelEditorUI
+        };
+
+        PopUpUIGroup = new()
+        {
+            pauseUI,
+            winUI,
+            loseUI,
+        };
+    }
+    
+    private void OpenUI(GameObject ui)
+    {
+        //if (ui.activeSelf == true) { return; }
+        if (ScreenUIGroup.Contains(ui))
+        {
+            foreach (GameObject go in ScreenUIGroup)
+            {
+                go.SetActive(false);
+            }
+            ui.SetActive(true);
+        }
+        if (PopUpUIGroup.Contains(ui))
+        {
+            Debug.Log("PopUpUIGroup.Contains(ui) " + ui);
+            foreach (GameObject go in PopUpUIGroup)
+            {
+                go.SetActive(false);
+            }
+            ui.SetActive(true);
+        }
     }
 
-    public void UIGameOver()
+    public void OpenMenuUI()
     {
-        gameOverUI.SetActive(true); // Hiển thị UI Game Over
+        OpenUI(menuUI);
+    }
+    public void OpenGameUI()
+    {
+        OpenUI(gameUI);
+    }
+    public void OpenReplayUI()
+    {
+        OpenUI(replayUI);
+    }
+    public void OpenLevelEditorUI()
+    {
+        OpenUI(levelEditorUI);
+    }
+    public void OpenPauseUI()
+    {
+        OpenUI(pauseUI);
+    }
+    public void OpenWinUI()
+    {
+        OpenUI(winUI);
+    }
+    public void OpenLoseUI()
+    {
+        OpenUI(loseUI);
     }
 
+    public void CloseSelf(GameObject UIToClose)
+    {
+        UIToClose.SetActive(false);
+    }
 
+    public void ToggleUI(GameObject UIToToggle)
+    {
+        UIToToggle.SetActive(!UIToToggle.activeSelf);
+    }
 }

@@ -75,4 +75,12 @@ public class PlayingCardUI : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         action.Invoke();
     }
+    public float SetHeightReturnWidth(float height)
+    {
+        var scale = height / cardHolder.GetComponent<RectTransform>().rect.height;
+        var width = cardHolder.GetComponent<RectTransform>().rect.width * scale;
+        //Debug.Log(width + " | " + height);
+        cardHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
+        return cardHolder.GetComponent<RectTransform>().rect.width;
+    }
 }

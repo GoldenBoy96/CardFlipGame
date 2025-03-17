@@ -70,7 +70,6 @@ public class FlipCardGameController : MonoBehaviour
             case GameStatus.Win:
                 //Notify Win
                 ObserverHelper.Notify(ObserverConstants.WIN, currentTurn, isFindPair);
-                Debug.Log("Win");
                 break;
             case GameStatus.Lose:
                 //Notify Lose
