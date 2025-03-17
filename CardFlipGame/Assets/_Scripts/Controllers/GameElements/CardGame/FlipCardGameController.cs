@@ -42,13 +42,13 @@ public class FlipCardGameController : MonoBehaviour
         {
             Level = level
         };
-        battleLog.Turns.Add(currentTurn);
         ObserverHelper.Notify(ObserverConstants.LOADED_GAME, currentTurn);
     }
 
     public void DoTurn(Coordinate coord1, Coordinate coord2)
     {
         currentTurn = ((ICloneable<Turn>)currentTurn).CloneSelf();
+        currentTurn.GameStatus = GameStatus.Normal;
 
         currentTurn.TurnLeft--;
         currentTurn.InputPair = new(coord1, coord2);
@@ -71,17 +71,20 @@ public class FlipCardGameController : MonoBehaviour
                 //Notify Win
                 ObserverHelper.Notify(ObserverConstants.WIN, currentTurn, isFindPair);
                 Debug.Log("Win");
-                BattleLogSaveLoadHelper.SaveBattleLog(battleLog);
                 break;
             case GameStatus.Lose:
                 //Notify Lose
                 ObserverHelper.Notify(ObserverConstants.LOSE, currentTurn, isFindPair);
                 Debug.Log("Lose");
-                BattleLogSaveLoadHelper.SaveBattleLog(battleLog);
                 break;
         }
 
+        if (isFindPair && currentTurn.GameStatus == GameStatus.Normal) currentTurn.GameStatus = GameStatus.FindPair;
         battleLog.Turns.Add(currentTurn);
+        if (currentTurn.GameStatus == GameStatus.Win || currentTurn.GameStatus == GameStatus.Lose)
+        {
+            BattleLogSaveLoadHelper.SaveBattleLog(battleLog);
+        }
     }
 
     public bool Validate(Coordinate coord1, Coordinate coord2)

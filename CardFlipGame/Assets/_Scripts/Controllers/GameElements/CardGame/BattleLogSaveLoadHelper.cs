@@ -39,8 +39,9 @@ public class BattleLogSaveLoadHelper
         return saveNameList;
     }
 
-    public static void DeleteBattleLog()
+    public static void DeleteBattleLog(string fileName)
     {
-
+        string filePath = $"{battleSaveDataPath}{fileName}";
+        System.IO.File.Delete(filePath);
     }
 }

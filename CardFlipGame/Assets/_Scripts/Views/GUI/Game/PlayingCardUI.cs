@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardUI : MonoBehaviour
+public class PlayingCardUI : MonoBehaviour
 {
     [SerializeField] Image cardFront;
     [SerializeField] Image cardBack;
@@ -16,9 +16,9 @@ public class CardUI : MonoBehaviour
     bool isDown;
     Coordinate coord;
 
-    private CardUIManager cardUIManager;
+    private PlayingUIManager cardUIManager;
 
-    public void SetUpCard(Sprite sprite, Coordinate coord, CardUIManager cardUIManager)
+    public void SetUpCard(Sprite sprite, Coordinate coord, PlayingUIManager cardUIManager)
     {
         cardFront.sprite = sprite;
         cardFront.gameObject.SetActive(true);
@@ -26,6 +26,8 @@ public class CardUI : MonoBehaviour
         this.cardUIManager = cardUIManager;
         this.coord = coord;
         isDown = true;
+        cardFront.gameObject.SetActive(false);
+        cardBack.gameObject.SetActive(true);
     }
 
     public void OnClickCard()
@@ -58,7 +60,7 @@ public class CardUI : MonoBehaviour
     IEnumerator WaitFlipHalfThenSetCardBackActive(bool isCardBackActive)
     {
         cardButton.interactable = false;
-        yield return new WaitForSeconds(flipCardTime / 2f);
+        yield return new WaitUntil(() => cardHolder.localRotation.eulerAngles.y == 90);
         cardHolder.DORotate(new Vector3(0, -90, 0), (flipCardTime / 2f), RotateMode.LocalAxisAdd).SetRelative(true).SetEase(Ease.Linear);
 
         cardFront.gameObject.SetActive(isCardBackActive);

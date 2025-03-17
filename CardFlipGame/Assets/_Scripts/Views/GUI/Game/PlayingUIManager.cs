@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardUIManager : MonoBehaviour
+public class PlayingUIManager : MonoBehaviour
 {
     [SerializeField] GameObject cardPrefab; // Prefab của card
     [SerializeField] Transform cardParent; // Parent của card
@@ -30,12 +30,30 @@ public class CardUIManager : MonoBehaviour
                 currentTurn = (Turn)param[0];
             }
             );
+        ObserverHelper.RegisterListener(ObserverConstants.WIN,
+            (param) =>
+            {
+                DoTurn((bool)param[1]);
+                currentTurn = (Turn)param[0];
+                //Show Win panel here
+            }
+            );
+        ObserverHelper.RegisterListener(ObserverConstants.LOSE,
+            (param) =>
+            {
+                DoTurn((bool)param[1]);
+                currentTurn = (Turn)param[0];
+                //Show Lose panel here
+            }
+            );
     }
 
     private void OnEnable()
     {
         ObserverHelper.Notify(ObserverConstants.START_GAME);
     }
+
+
     public void GenerateCard(int[,] matrix)
     {
         foreach (Transform child in cardParent)
@@ -49,7 +67,7 @@ public class CardUIManager : MonoBehaviour
             for (int j = 0; j < matrix.GetLength(1); j++)
             {
                 cardGameObjects[i, j] = PoolingHelper.SpawnObject(cardPrefab, cardParent, Vector3.zero, Quaternion.identity);
-                cardGameObjects[i, j].GetComponent<CardUI>().SetUpCard(cardSprites[matrix[i, j]], new(i, j), this);
+                cardGameObjects[i, j].GetComponent<PlayingCardUI>().SetUpCard(cardSprites[matrix[i, j]], new(i, j), this);
             }
         }
 
@@ -60,7 +78,6 @@ public class CardUIManager : MonoBehaviour
 
     public void RegisterSelectionCard(Coordinate coord)
     {
-        Debug.Log("RegisterSelectionCard " + registeredCard.Count);
         if (registeredCard.Count == 0)
         {
             registeredCard.Add(coord);
@@ -78,14 +95,14 @@ public class CardUIManager : MonoBehaviour
         {
             foreach (var card in registeredCard)
             {
-                cardGameObjects[card.X, card.Y].GetComponent<CardUI>().DisactiveCard();
+                cardGameObjects[card.X, card.Y].GetComponent<PlayingCardUI>().DisactiveCard();
             }
         }
         else
         {
             foreach (var card in registeredCard)
             {
-                cardGameObjects[card.X, card.Y].GetComponent<CardUI>().FlipCardDown();
+                cardGameObjects[card.X, card.Y].GetComponent<PlayingCardUI>().FlipCardDown();
             }
         }
         Debug.Log(currentTurn.CurrentScore);
