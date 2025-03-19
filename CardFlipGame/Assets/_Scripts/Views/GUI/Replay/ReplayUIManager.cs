@@ -106,8 +106,14 @@ public class ReplayingUIManager : MonoBehaviour
             for (int j = 0; j < matrix.GetLength(1); j++)
             {
                 cardGameObjects[i, j] = PoolingHelper.SpawnObject(cardPrefab, cardParent, Vector3.zero, Quaternion.identity);
-                cardGameObjects[i, j].GetComponent<ReplayCardUI>().SetUpCard(cardSprites[matrix[i, j]], new(i, j), this);
-                if (matrix[i, j] == 0) cardGameObjects[i, j].GetComponent<ReplayCardUI>().DisactiveCard();
+                if (matrix[i, j] != 0)
+                {
+                    cardGameObjects[i, j].GetComponent<ReplayCardUI>().SetUpCard(cardSprites[matrix[i, j] - 1], new(i, j), this);
+                }
+                else
+                {
+                    cardGameObjects[i, j].GetComponent<ReplayCardUI>().DisactiveCard();
+                }
             }
         }
 

@@ -21,7 +21,7 @@ public class ViewportExpandByChildItem : MonoBehaviour
             if (itemNumber > maxChildShowAtATime) itemNumber = maxChildShowAtATime;
         }
         Vector2 newSize = new(
-            templateContent.rect.width,
+            dropdownList.sizeDelta.x,
             itemNumber * templateContent.rect.height
             );
         dropdownList.sizeDelta = newSize;

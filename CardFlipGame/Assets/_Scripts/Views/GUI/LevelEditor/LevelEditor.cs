@@ -39,6 +39,7 @@ public class LevelEditor : MonoBehaviour
         widthInputField.text = level.BaseMatrix.GetLength(1).ToString();
         totalTurnInputField.text = level.TotalTurn.ToString();
         scorePerTurnInputField.text = level.ScorePerTurn.ToString();
+        grid.constraintCount = level.BaseMatrix.GetLength(0);
 
         if (levelInputGameObjects != null)
         {
@@ -47,6 +48,7 @@ public class LevelEditor : MonoBehaviour
                 if (levelInput != null) PoolingHelper.ReturnObjectToPool(levelInput.gameObject);
             }
         }
+        levelInputGameObjects = new TMP_InputField[height, width];
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -54,8 +56,14 @@ public class LevelEditor : MonoBehaviour
                 levelInputGameObjects[i, j] = PoolingHelper.SpawnObject(levelInputPrefab.gameObject, grid.transform, Vector3.zero, Quaternion.identity).GetComponent<TMP_InputField>();
                 try
                 {
-                    levelInputGameObjects[i, j].text = level.BaseMatrix[i, j].ToString();
-                    Debug.Log(level.BaseMatrix[i, j]);
+                    if (level.BaseMatrix[i, j] >= 0)
+                    {
+                        levelInputGameObjects[i, j].text = level.BaseMatrix[i, j].ToString();
+                    } else
+                    {
+                        levelInputGameObjects[i, j].text = "0";
+                    }
+                    Debug.Log(i + " | " + +j + " | " + level.BaseMatrix[i, j] + " | " + levelInputGameObjects[i, j].text);
                 }
                 catch
                 {
