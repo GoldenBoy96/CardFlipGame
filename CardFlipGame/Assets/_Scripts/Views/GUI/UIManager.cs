@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject pauseUI;
     [SerializeField] GameObject winUI;
     [SerializeField] GameObject loseUI;
+    [SerializeField] GameObject textUI;
     List<GameObject> PopUpUIGroup = new();
 
 
@@ -52,6 +54,7 @@ public class UIManager : MonoBehaviour
             pauseUI,
             winUI,
             loseUI,
+            textUI
         };
     }
     
@@ -106,6 +109,11 @@ public class UIManager : MonoBehaviour
         OpenUI(loseUI);
     }
 
+    public void OpenTextUI (string message)
+    {
+        OpenUI(textUI);
+        textUI.GetComponentInChildren<TMP_Text>().text = message;   
+    }
     public void CloseSelf(GameObject UIToClose)
     {
         UIToClose.SetActive(false);
@@ -115,4 +123,5 @@ public class UIManager : MonoBehaviour
     {
         UIToToggle.SetActive(!UIToToggle.activeSelf);
     }
+
 }

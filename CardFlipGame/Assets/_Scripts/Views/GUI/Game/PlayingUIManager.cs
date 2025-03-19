@@ -22,9 +22,9 @@ public class PlayingUIManager : MonoBehaviour
         ObserverHelper.RegisterListener(ObserverConstants.LOADED_GAME,
             (param) =>
             {
+                UpdateUIStat((Turn)param[0]);
                 GenerateCard(((Turn)param[0]).Matrix);
                 currentTurn = (Turn)param[0]; 
-                UpdateUIStat((Turn)param[0]);
             }
             );
         ObserverHelper.RegisterListener(ObserverConstants.NORMAL,
@@ -78,6 +78,7 @@ public class PlayingUIManager : MonoBehaviour
             {
                 cardGameObjects[i, j] = PoolingHelper.SpawnObject(cardPrefab, cardParent, Vector3.zero, Quaternion.identity);
                 cardGameObjects[i, j].GetComponent<PlayingCardUI>().SetUpCard(cardSprites[matrix[i, j]], new(i, j), this);
+                if (matrix[i, j] == 0) cardGameObjects[i, j].GetComponent<ReplayCardUI>().DisactiveCard();
             }
         }
 
@@ -134,7 +135,13 @@ public class PlayingUIManager : MonoBehaviour
 
     private void UpdateUIStat(Turn turn)
     {
+        Debug.Log("UpdateUIStat " + turn.TurnLeft);
         scoreTMP.text = $"Score: {turn.CurrentScore}";
         turnLeftTMP.text = $"Turn remain: {turn.TurnLeft}";
+    }
+
+    public void Reset()
+    {
+        ObserverHelper.Notify(ObserverConstants.START_GAME);
     }
 }

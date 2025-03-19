@@ -28,8 +28,22 @@ public class LevelSaveLoadHelper
 
         JsonHelper.SaveData(level, filePath);
     }
+    public static void SaveLevel(Level level, string fileName)
+    {
+        string filePath = $"{levelSaveDataPath}{fileName}";
+        Debug.Log(level);
+        JsonHelper.SaveData(level, filePath);
+    }
 
     public static Level LoadLevel()
+    {
+        string filePath = $"{levelSaveDataPath}{fileName}";
+        Level load = JsonHelper.ReadData<Level>(filePath);
+        if (load == null) { GenerateDefaultLevel(); }
+        load = JsonHelper.ReadData<Level>(filePath);
+        return load;
+    }
+    public static Level LoadLevel(string fileName)
     {
         string filePath = $"{levelSaveDataPath}{fileName}";
         Level load = JsonHelper.ReadData<Level>(filePath);

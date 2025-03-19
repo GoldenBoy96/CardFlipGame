@@ -15,6 +15,11 @@ public class ReplayCardUI : MonoBehaviour
     bool isDown;
     Coordinate coord;
 
+    private void OnEnable()
+    {
+        cardHolder.gameObject.SetActive(true);
+
+    }
     private ReplayingUIManager cardUIManager;
 
     public float FlipCardTime { get => flipCardTime; }
@@ -72,7 +77,6 @@ public class ReplayCardUI : MonoBehaviour
     {
         var scale = height / cardHolder.GetComponent<RectTransform>().rect.height;
         var width = cardHolder.GetComponent<RectTransform>().rect.width * scale;
-        Debug.Log(width + " | " + height);
         cardHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height);
         return cardHolder.GetComponent<RectTransform>().rect.width;
     }

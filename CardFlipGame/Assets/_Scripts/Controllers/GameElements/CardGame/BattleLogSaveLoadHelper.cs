@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using DG.Tweening.Plugins.Core.PathCore;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
-public class BattleLogSaveLoadHelper 
+public class BattleLogSaveLoadHelper
 {
     private static string battleSaveDataPath = $"{Application.persistentDataPath}/FlipCard/BattleLog/";
     public static void SaveBattleLog(BattleLog battleLog)
@@ -43,5 +45,14 @@ public class BattleLogSaveLoadHelper
     {
         string filePath = $"{battleSaveDataPath}{fileName}";
         System.IO.File.Delete(filePath);
+    }
+
+    public static void OpenExplorer()
+    {
+        string winPath = $"{Application.persistentDataPath}/FlipCard/BattleLog";
+        winPath = winPath.Replace("/", "\\"); 
+        Debug.Log(winPath);
+        Process.Start("explorer.exe", $"/open, {winPath}");
+
     }
 }

@@ -18,6 +18,12 @@ public class PlayingCardUI : MonoBehaviour
 
     private PlayingUIManager cardUIManager;
 
+    private void OnEnable()
+    {
+        cardHolder.gameObject.SetActive(true);
+        cardButton.interactable = true;
+    }
+
     public void SetUpCard(Sprite sprite, Coordinate coord, PlayingUIManager cardUIManager)
     {
         cardFront.sprite = sprite;

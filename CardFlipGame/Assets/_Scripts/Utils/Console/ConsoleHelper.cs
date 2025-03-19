@@ -12,9 +12,9 @@ public class ConsoleHelper
 
     public static void ClearConsole()
     {
-        var assembly = Assembly.GetAssembly(typeof(Editor));
-        var type = assembly.GetType("UnityEditor.LogEntries");
-        var method = type.GetMethod("Clear");
-        method.Invoke(new object(), null);
+        //var assembly = Assembly.GetAssembly(typeof(Editor));
+        //var type = assembly.GetType("UnityEditor.LogEntries");
+        //var method = type.GetMethod("Clear");
+        //method.Invoke(new object(), null);
     }
 }

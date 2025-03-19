@@ -33,7 +33,14 @@ public class JsonHelper
 
     public static void SaveData(System.Object saveObject, string filePath)
     {
-        string json = JsonConvert.SerializeObject(saveObject, Formatting.Indented);
+        //string json = JsonConvert.SerializeObject(saveObject, Formatting.Indented);
+
+        string json = JsonConvert.SerializeObject(saveObject, Formatting.Indented,
+                new JsonSerializerSettings
+                {
+                    Formatting = Newtonsoft.Json.Formatting.Indented,
+                    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                });
 
         string extension = Path.GetExtension(filePath);
         if (string.IsNullOrEmpty(extension))
